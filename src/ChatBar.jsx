@@ -10,7 +10,7 @@ class ChatBar extends Component {
 
   onMessageInput(event) {
     this.setState({
-    content: event.target.value
+    message: event.target.value
     });
   }
 
@@ -25,13 +25,16 @@ class ChatBar extends Component {
     if(event.charCode === 13){
       const currentUser = this.state.username ? this.state.username : 'Anonymous';
 
-      this.props.onNewPost(this.state.content, currentUser);
+      //this.socket.send(msg);
+
+      this.props.onNewPost(this.state.message, currentUser);
       this.setState({ content: '' });
+      event.target.value = '';
     }
   }
 
   render() {
-
+    console.log('rendering <ChatBar>');
     return (
       <footer className="chatbar">
         <input className="chatbar-username" placeholder="Your Name (Optional)" onChange={ this.onUsernameInput } />

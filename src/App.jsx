@@ -7,36 +7,31 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-  currentUser: {name: 'Anonymous'}, // optional. if currentUser is not defined, it means the user is Anonymous
-  messages: [
-    {
-      id: 1,
-      username: 'Reginald',
-      content: 'Has anyone seen my marbles?',
+      currentUser: {name: 'Anonymous'}, // optional. if currentUser is not defined, it means the user is Anonymous
+      messages: []
     },
-    {
-      id: 2,
-      username: 'Anonymous',
-      content: 'No, I think you lost them. You lost your marbles Reginald. You lost them for good.'
-    }
-    ]
-  },
-  this.onNewPost = this.onNewPost.bind(this);
+    this.onNewPost = this.onNewPost.bind(this);
   }
 
-onNewPost(content, username) {
-  const messagesLength = this.state.messages.length + 1;
+  componentDidMount() {
+    this.socket = new WebSocket('ws://localhost:3001');
 
-  setTimeout(() => {
+    this.socket.addEventListener('message', (msg) => {
+      if(msg.data === 'Connected to server') {
+        console.log(msg.data);
+      } else {
+        this.setState({messages: this.state.messages.concat(JSON.parse(msg.data))});
+      }
+    });
+  }
 
-  const newMessage = {id: messagesLength, username: username, content: content};
-  const messages = this.state.messages.concat(newMessage);
-
-  this.setState({messages: messages})
-  }, 500);
-}
+  onNewPost(messageContent, username) {
+    const newMessage = {id: '', username: username, content: messageContent};
+    this.socket.send(JSON.stringify(newMessage));
+  }
 
   render() {
+    console.log('rendering <App>');
     return (
       <div>
         <ChatBar onNewPost={ this.onNewPost } />
