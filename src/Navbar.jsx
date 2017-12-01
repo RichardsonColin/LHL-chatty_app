@@ -12,7 +12,6 @@ class Navbar extends Component {
 
 
   render() {
-    console.log('naaaav', this.props);
     return (
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
