@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
+//import NotificationList from './NotificationList.jsx';
 
 class App extends Component {
 
@@ -11,31 +12,71 @@ class App extends Component {
       messages: []
     },
     this.onNewPost = this.onNewPost.bind(this);
+    this.handleNewUser = this.handleNewUser.bind(this);
   }
 
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:3001');
 
-    this.socket.addEventListener('message', (msg) => {
-      if(msg.data === 'Connected to server') {
-        console.log(msg.data);
-      } else {
-        this.setState({messages: this.state.messages.concat(JSON.parse(msg.data))});
+    this.socket.onmessage = (message) => {
+      const serverMessage = JSON.parse(message.data);
+
+      switch(serverMessage.type) {
+        case "connected":
+          //console.log(serverMessage.content);
+          break;
+        case "incomingMessage":
+          const receivedMessage = JSON.parse(message.data);
+          //console.log('switch', receivedMessage);
+          this.setState({messages: this.state.messages.concat(receivedMessage)});
+          break;
+        case "incomingNotification":
+          console.log('server', serverMessage);
+          const receivedNotification = JSON.parse(message.data);
+          this.setState({messages: this.state.messages.concat(receivedNotification)});
+          break;
+        default:
+          // show an error in the console if the message type is unknown
+          throw new Error("Unknown event type " + message.data);
       }
-    });
+    };
   }
 
-  onNewPost(messageContent, username) {
-    const newMessage = {id: '', username: username, content: messageContent};
-    this.socket.send(JSON.stringify(newMessage));
+  onNewPost(messageContent) {
+    const user = this.state.currentUser.name;
+    const newMessage = {
+      id: '',
+      type: 'postMessage',
+      username: user,
+      content: messageContent
+    };
+    const stringifiedNewMessage = JSON.stringify(newMessage);
+
+    this.socket.send(stringifiedNewMessage);
+  }
+
+  handleNewUser(username) {
+    const messageUser = this.state.currentUser.name;
+
+    if(username !== messageUser) {
+      this.setState({ currentUser: {name: username} });
+
+      const NewNotification = {
+        type: 'postNotification',
+        userChange: `${messageUser} has changed their name to ${username}`
+      }
+      const stringifiedNewNotification = JSON.stringify(NewNotification);
+      this.socket.send(stringifiedNewNotification);
+    }
+
   }
 
   render() {
-    console.log('rendering <App>');
+    //console.log('rendering <App>');
     return (
       <div>
-        <ChatBar onNewPost={ this.onNewPost } />
-        <MessageList messages={ this.state.messages }/>
+        <ChatBar onNewPost={ this.onNewPost } handleNewUser={ this.handleNewUser }/>
+        <MessageList messages={ this.state.messages } /*notifications={ this.state.notifications }*/ />
       </div>
     );
   }

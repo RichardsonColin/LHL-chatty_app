@@ -10,35 +10,40 @@ class ChatBar extends Component {
 
   onMessageInput(event) {
     this.setState({
-    message: event.target.value
+      message: event.target.value
     });
   }
 
   onUsernameInput(event) {
-    this.setState({
-      username: event.target.value
-    });
+    let currentUser = event.target.value;
+
+    if(currentUser === '') {
+      currentUser = 'Anonymous';
+    }
+
+    this.props.handleNewUser(currentUser);
   }
 
   handleKeyPress(event) {
     // If enter is pressed.
-    if(event.charCode === 13){
-      const currentUser = this.state.username ? this.state.username : 'Anonymous';
+    if(event.charCode === 13) {
+      // Prevents an empty input field.
+      if(!event.target.value) {
+        return;
+      }
 
-      //this.socket.send(msg);
-
-      this.props.onNewPost(this.state.message, currentUser);
-      this.setState({ content: '' });
+      this.props.onNewPost(this.state.message);
       event.target.value = '';
+      this.state.message = '';
     }
   }
 
   render() {
-    console.log('rendering <ChatBar>');
+    //console.log('rendering <ChatBar>');
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" placeholder="Your Name (Optional)" onChange={ this.onUsernameInput } />
-        <input className="chatbar-message" placeholder="Type a message and hit ENTER" onChange={ this.onMessageInput } onKeyPress={this.handleKeyPress} />
+        <input className="chatbar-username" placeholder="Your Name (Optional)" /*onInput={ this.onUsernameInput }*/ onBlur={ this.onUsernameInput } />
+        <input className="chatbar-message" placeholder="Type a message and hit ENTER" onInput={ this.onMessageInput } onKeyPress={this.handleKeyPress} />
       </footer>
     );
   }
