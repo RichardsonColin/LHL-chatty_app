@@ -42,7 +42,7 @@ class ChatBar extends Component {
     //console.log('rendering <ChatBar>');
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" placeholder="Your Name (Optional)" /*onInput={ this.onUsernameInput }*/ onBlur={ this.onUsernameInput } />
+        <input className="chatbar-username" placeholder="Your Name (Optional)" onBlur={ this.onUsernameInput } />
         <input className="chatbar-message" placeholder="Type a message and hit ENTER" onInput={ this.onMessageInput } onKeyPress={this.handleKeyPress} />
       </footer>
     );

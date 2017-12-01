@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
+import Navbar from './Navbar.jsx';
 //import NotificationList from './NotificationList.jsx';
 
 class App extends Component {
@@ -9,7 +10,8 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: 'Anonymous'}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: []
+      messages: [],
+      users: 0
     },
     this.onNewPost = this.onNewPost.bind(this);
     this.handleNewUser = this.handleNewUser.bind(this);
@@ -20,10 +22,15 @@ class App extends Component {
 
     this.socket.onmessage = (message) => {
       const serverMessage = JSON.parse(message.data);
+      console.log(serverMessage);
 
       switch(serverMessage.type) {
         case "connected":
-          //console.log(serverMessage.content);
+          console.log(serverMessage.content);
+          break;
+        case "users":
+          this.setState({users: serverMessage.connected});
+          console.log('app', serverMessage);
           break;
         case "incomingMessage":
           const receivedMessage = JSON.parse(message.data);
@@ -68,15 +75,15 @@ class App extends Component {
       const stringifiedNewNotification = JSON.stringify(NewNotification);
       this.socket.send(stringifiedNewNotification);
     }
-
   }
 
   render() {
     //console.log('rendering <App>');
     return (
       <div>
+        <Navbar userCounter={ this.state.users } />
         <ChatBar onNewPost={ this.onNewPost } handleNewUser={ this.handleNewUser }/>
-        <MessageList messages={ this.state.messages } /*notifications={ this.state.notifications }*/ />
+        <MessageList messages={ this.state.messages } />
       </div>
     );
   }

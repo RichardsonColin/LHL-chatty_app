@@ -79,6 +79,12 @@ body {
       top: 0;
     }
 
+    .user-counter {
+      display: inline-block;
+      float: right;
+      line-height: 60px;
+    }
+
     .navbar-brand {
       color: inherit;
       display: block;
