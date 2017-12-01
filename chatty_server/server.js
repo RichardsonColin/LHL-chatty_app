@@ -17,22 +17,23 @@ const server = express()
 const wss = new WebSocket.Server ({ server });
 
 const userCounter = {
-    type: 'users',
-    connected: 0
-  };
+  type: 'users',
+  connected: 0
+};
+
+const randomColour = () => {
+  return '#'+Math.floor(Math.random()*16777215).toString(16)
+};
+
 
 const messageHandler = (message) => {
   switch(message.type) {
     case "postMessage":
-      //console.log('message', message);
       message.type = 'incomingMessage';
-      console.log('server', message);
       return message;
       break;
     case "postNotification":
-      console.log('noti', message);
       message.type = 'incomingNotification';
-      console.log('server', message);
       return message;
       break;
     default:
@@ -57,7 +58,7 @@ wss.broadcast = function broadcast(data) {
 wss.on('connection', (socket) => {
   //console.log(socket._socket._server._connections);
   userCounter.connected += 1;
-  console.log(userCounter);
+  const userColour = randomColour();
 
   const connectionWelcome = {
     type: 'connected',
@@ -71,6 +72,7 @@ wss.on('connection', (socket) => {
 
     // Add a uniqu ID.
     handledMessage.id = uuidv4();
+    handledMessage.colour = userColour;
 
     console.log(`user ${handledMessage.username} said ${handledMessage.content}`);
 
@@ -79,13 +81,11 @@ wss.on('connection', (socket) => {
 
   wss.broadcast(JSON.stringify(userCounter));
   socket.send(JSON.stringify(connectionWelcome));
+  //socket.send(JSON.stringify(colourPicker));
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   socket.on('close', () => {
     userCounter.connected -= 1;
-        console.log(userCounter);
-
-
     console.log('Client disconnected');
     wss.broadcast(JSON.stringify(userCounter));
   });
