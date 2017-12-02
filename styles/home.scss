@@ -1,20 +1,30 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css");
 
+$primary-color: #935AA9;
+$secondary-color: #61CDD0;
+
+
 body {
-      background: white;
+      background: #FFF;
       color: black;
-      font-family: 'Open Sans', sans-serif;
-      font-size: 14px;
+      font-family: 'VT323', monospace;
+      font-size: 22px;
       margin: 70px 0;
     }
 
     h1 {
-      color: tomato;
+      color: #FFF;
+    }
+
+    img {
+      border-style: none;
+      opacity: 0.08;
+      position: absolute;
     }
 
     .chatbar {
-      background: tomato;
+      background: $primary-color;
       border-top: 1px solid black;
       bottom: 0;
       display: flex;
@@ -69,7 +79,7 @@ body {
     }
 
     .navbar {
-      background: tomato;
+      background: $secondary-color;
       border-bottom: 1px solid black;
       height: 60px;
       left: 0;
@@ -90,7 +100,7 @@ body {
       display: block;
       float: left;
       font-weight: 700;
-      font-size: 28px;
+      font-size: 40px;
       height: 60px;
       line-height: 60px;
       padding: 0 10px;

@@ -3,19 +3,13 @@ import React, {Component} from 'react';
 class Navbar extends Component {
   constructor(props) {
     super(props);
-    //this.userCounter = this.userCounter.bind(this);
   }
-
-  // userCounter(){
-  //   this.props.userCounter;
-  // }
-
 
   render() {
     return (
       <nav className="navbar">
-        <a href="/" className="navbar-brand">Chatty</a>
-        <div className="user-counter">{ `${this.props.userCounter} users online` }</div>
+        <a href="/" className="navbar-brand">Chat-It-Out</a>
+        <div className="user-counter">{ `${this.props.userCounter} user(s) online` }</div>
       </nav>
     );
   }
