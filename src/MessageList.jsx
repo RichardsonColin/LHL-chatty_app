@@ -10,7 +10,8 @@ class MessageList extends Component {
         content={ post.content }
         type={ post.type }
         userChange={ post.userChange }
-        colour={ post.colour } />
+        colour={ post.colour }
+        image={ post.image } />
     });
 
     return (

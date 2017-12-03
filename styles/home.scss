@@ -21,6 +21,7 @@ body {
       border-style: none;
       opacity: 0.08;
       position: absolute;
+      z-index: -1;
     }
 
     .chatbar {
@@ -74,8 +75,16 @@ body {
     }
 
     .message-username {
-      flex: 2;
       font-weight: 700;
+      overflow: visible;
+    }
+
+    .message-image {
+      display: flex;
+      margin-left: 50px;
+      opacity: 1;
+      position: inherit;
+      width: 50%;
     }
 
     .navbar {

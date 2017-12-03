@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 class Message extends Component {
   render() {
 
-    // assings unique user colour.
+    // Assings unique colour to user name.
     const divStyle = {
       color: this.props.colour
     };
@@ -16,6 +16,7 @@ class Message extends Component {
               <span className="message-username" style={divStyle}>{this.props.user}</span>
               <span className="message-content">{this.props.content}</span>
             </div>
+            <img className="message-image" src={ this.props.image } />
         </main>
       );
     }

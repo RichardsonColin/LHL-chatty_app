@@ -19,6 +19,20 @@ class App extends Component {
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:3001');
 
+    // Checks the incoming message for an html image link.
+    function imageCheck(message) {
+      const splitMessage = message.content.split(' ');
+
+      for(const eachWord in splitMessage) {
+        if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(splitMessage[eachWord])) {
+          message.image = splitMessage[eachWord];
+          splitMessage.splice(eachWord, 1);
+        }
+      }
+      message.content = splitMessage.join(' ');
+      return message;
+    }
+
     this.socket.onmessage = (message) => {
       const serverMessage = JSON.parse(message.data);
 
@@ -30,7 +44,8 @@ class App extends Component {
           break;
         case "incomingMessage":
           const receivedMessage = JSON.parse(message.data);
-          this.setState({messages: this.state.messages.concat(receivedMessage)});
+          const updateMessage = imageCheck(receivedMessage);
+          this.setState({messages: this.state.messages.concat(updateMessage)});
           break;
         case "incomingNotification":
           const receivedNotification = JSON.parse(message.data);
@@ -50,6 +65,7 @@ class App extends Component {
       type: 'postMessage',
       username: user,
       content: messageContent,
+      image: '',
       colour: ''
     };
     const stringifiedNewMessage = JSON.stringify(newMessage);
@@ -73,7 +89,6 @@ class App extends Component {
   }
 
   render() {
-    //console.log('rendering <App>');
     return (
       <div>
         <Navbar userCounter={ this.state.users } />
