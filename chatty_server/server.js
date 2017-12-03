@@ -9,19 +9,19 @@ const PORT = 3001;
 
 // Create a new express server
 const server = express()
-   // Make the express server serve static assets (html, javascript, css) from the /public folder
   .use(express.static('public'))
   .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
 
 // Create the WebSockets server
 const wss = new WebSocket.Server ({ server });
 
+// Monitors the current users to be sent and displayed client-side.
 const userCounter = {
   type: 'users',
   connected: 0
 };
 
-const randomColour = () => {
+const randomUsernameColour = () => {
   return '#'+Math.floor(Math.random()*16777215).toString(16)
 };
 
@@ -38,7 +38,7 @@ const messageHandler = (message) => {
       break;
     default:
       console.log('error', message);
-      // show an error in the console if the message type is unknown
+      // Show an error in the console if the message type is unknown
       throw new Error("Unknown event type " + message.type);
   }
 };
@@ -54,17 +54,17 @@ wss.broadcast = function broadcast(data) {
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
-// the ws parameter in the callback.
+// the socket parameter in the callback.
 wss.on('connection', (socket) => {
-  //console.log(socket._socket._server._connections);
-  userCounter.connected += 1;
-  const userColour = randomColour();
-
   const connectionWelcome = {
     type: 'connected',
     content: 'Connected to server'
   }
+  const userColour = randomUsernameColour();
+  userCounter.connected++;
+
   console.log('Client connected');
+  socket.send(JSON.stringify(connectionWelcome));
 
   socket.on('message', (message) => {
     const appMessage = JSON.parse(message);
@@ -72,20 +72,18 @@ wss.on('connection', (socket) => {
 
     // Add a uniqu ID.
     handledMessage.id = uuidv4();
-    handledMessage.colour = userColour;
 
-    console.log(`user ${handledMessage.username} said ${handledMessage.content}`);
+    // Add a unique colour to the user's name.
+    handledMessage.colour = userColour;
 
     wss.broadcast(JSON.stringify(handledMessage));
     });
 
   wss.broadcast(JSON.stringify(userCounter));
-  socket.send(JSON.stringify(connectionWelcome));
-  //socket.send(JSON.stringify(colourPicker));
 
-  // Set up a callback for when a client closes the socket. This usually means they closed their browser.
+  // Set up a callback for when a client closes the socket.
   socket.on('close', () => {
-    userCounter.connected -= 1;
+    userCounter.connected--;
     console.log('Client disconnected');
     wss.broadcast(JSON.stringify(userCounter));
   });
