@@ -1,45 +1,27 @@
-React Boilerplate
-=====================
+# Chat-It-Out Project
 
-A minimal and light dev environment for ReactJS.
+Chat-It-Out allows users to communicate with each other without having to register accounts. It uses React, as well as modern tools for Node including Webpack and Babel.
 
-### Usage
+## Getting Started
 
-Clone the boilerplate and create your own git repo.
+1. Fork this repository, then clone your fork of this repository.
+2. Install dependencies using the `npm install` command.
+3. Start the web server using the `npm run local` command. The app will be served at <http://localhost:3000/>.
+4. Go to <http://localhost:3000/> in your browser.
+5. Supports usage of multiple clients at one time.
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+## Final Product
 
-Install the dependencies and start the server.
+!["Screenshot of full page"](https://github.com/RyukyuColin/LHL-chatty_app/blob/master/docs/Screen%20Shot%202017-12-03%20at%2021.36.21.png)
+!["Screenshot of user with unique colour"](https://github.com/RyukyuColin/LHL-chatty_app/blob/master/docs/Screen%20Shot%202017-12-03%20at%2021.37.51.png)
+!["Screenshot of a URL image included in the chat"](https://github.com/RyukyuColin/LHL-chatty_app/blob/master/docs/Screen%20Shot%202017-12-03%20at%2021.41.23.png)
+!["Screenshot of multiple clients"](https://github.com/RyukyuColin/LHL-chatty_app/blob/master/docs/Screen%20Shot%202017-12-03%20at%2021.44.21.png)
 
-```
-npm install
-npm start
-open http://localhost:3000
-```
-
-### Static Files
-
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
-
-### Dependencies
+## Dependencies
 
 * React
 * Webpack
 * [babel-loader](https://github.com/babel/babel-loader)
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* Node-SASS
+
