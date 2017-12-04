@@ -37,23 +37,23 @@ class App extends Component {
       const serverMessage = JSON.parse(message.data);
 
       switch(serverMessage.type) {
-        case "connected":
+        case 'connected':
           break;
-        case "users":
+        case 'users':
           this.setState({users: serverMessage.connected});
           break;
-        case "incomingMessage":
+        case 'incomingMessage':
           const receivedMessage = JSON.parse(message.data);
           const updateMessage = imageCheck(receivedMessage);
           this.setState({messages: this.state.messages.concat(updateMessage)});
           break;
-        case "incomingNotification":
+        case 'incomingNotification':
           const receivedNotification = JSON.parse(message.data);
           this.setState({messages: this.state.messages.concat(receivedNotification)});
           break;
         default:
           // show an error in the console if the message type is unknown
-          throw new Error("Unknown event type " + message.data);
+          throw new Error('Unknown event type ' + message.data);
       }
     };
   }

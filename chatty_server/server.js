@@ -28,18 +28,18 @@ const randomUsernameColour = () => {
 
 const messageHandler = (message) => {
   switch(message.type) {
-    case "postMessage":
+    case 'postMessage':
       message.type = 'incomingMessage';
       return message;
       break;
-    case "postNotification":
+    case 'postNotification':
       message.type = 'incomingNotification';
       return message;
       break;
     default:
       console.log('error', message);
       // Show an error in the console if the message type is unknown
-      throw new Error("Unknown event type " + message.type);
+      throw new Error('Unknown event type ' + message.type);
   }
 };
 
